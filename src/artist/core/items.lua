@@ -152,7 +152,7 @@ end
 -- @see Items.unhash_item
 local function hash_item(item)
   if item == nil then return nil end
-  local hash = item.name
+  local hash = item.name .. "/" .. item.damage
   if not hash then error("Item has no hash") end
   -- shouldnt really matter if item.nbtHash is different from item.nbt as it only matters they are unique
   if item.nbtHash then hash = hash .. "@" .. item.nbtHash end

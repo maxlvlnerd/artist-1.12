@@ -3,6 +3,7 @@ local concurrent = require "artist.lib.concurrent"
 local Items = require "artist.core.items"
 local turtle_helpers = require "artist.lib.turtle"
 local schema = require "artist.lib.config".schema
+local log = require "artist.lib.log".get_logger(...)
 
 return function(context)
   local this_turtle = turtle_helpers.get_name()
@@ -33,7 +34,7 @@ return function(context)
     -- Namely, which ones shouldn't we pick up from.
     for i = 1, 16 do
       local info = turtle.getItemDetail(i)
-      if info and info.name == name then
+      if info and (info.name .. "/" .. info.damage) == name then
         if config.auto_drop then
           turtle.select(i)
           turtle.drop()
@@ -58,7 +59,7 @@ return function(context)
       if item == nil then
         -- If we've no item then unprotect this slot
         protected_slots[i] = false
-      elseif protect_item ~= item.name then
+      elseif protect_item ~= (item.name .. "/" .. item.damage) then
         -- Otherwise if we're not protected or the protection isn't matching
         -- then extract
         local item = turtle.getItemDetail(i, true)
