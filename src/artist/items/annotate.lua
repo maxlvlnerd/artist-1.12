@@ -28,7 +28,7 @@ return function(context)
     end
 
     -- Durability
-    if details.maxDamage then
+    if details.maxDamage > 0 then
       table.insert(annotations, {
         key = "Durability",
         value = ("%d/%d (%.2f%%)"):format(
