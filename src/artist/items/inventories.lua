@@ -90,7 +90,8 @@ function Inventories:enabled(name)
     if self.ignored_types[types[i]] then return false end
   end
 
-  return is_inventory
+  -- definitely not the best way to go about it
+  return peripheral.wrap(name).pullItems ~= nil
 end
 
 return Inventories

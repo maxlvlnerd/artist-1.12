@@ -154,7 +154,8 @@ local function hash_item(item)
   if item == nil then return nil end
   local hash = item.name
   if not hash then error("Item has no hash") end
-  if item.nbt then hash = hash .. "@" .. item.nbt end
+  -- shouldnt really matter if item.nbtHash is different from item.nbt as it only matters they are unique
+  if item.nbtHash then hash = hash .. "@" .. item.nbtHash end
   return hash
 end
 
@@ -210,7 +211,8 @@ local function get_details(self, entry)
 
     assert(slot, "Inventory listed as a source, but item is not in inventory.")
 
-    local item = inventory.remote.getItemDetail(slot)
+    -- getItemMeta seems closest to getItemDetail
+    local item = inventory.remote.getItemMeta(slot)
     if hash_item(item) == entry.hash then
       item.count = nil
       entry.details = item
@@ -391,7 +393,8 @@ function Items:load_peripheral(name)
 
   -- Shouldn't ever happen, but just in case!
   local remote = peripheral.wrap(name)
-  if not remote or not peripheral.hasType(remote, "inventory") then return end
+  -- check if the plethora pullItems function exists instead of checking the peripheral type
+  if not remote or not remote.pullItems then return end
 
   local existing = self.inventories[name]
   if not existing then
