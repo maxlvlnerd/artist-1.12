@@ -41,8 +41,10 @@ local function build_list(items, filter)
         local annotations = item.annotations
         for i = 1, #annotations do
           local annotation = annotations[i]
-          local annotation_score = (fuzzy(annotation.value, filter) or 0) * (annotation.search_factor or 1)
-          if annotation_score > score then score = annotation_score end
+          if annotation and annotation.value then
+            local annotation_score = (fuzzy(annotation.value, filter) or 0) * (annotation.search_factor or 1)
+            if annotation_score > score then score = annotation_score end
+          end
         end
 
         if score > 0 then
